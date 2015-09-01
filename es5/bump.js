@@ -457,15 +457,18 @@ var Bump = (function () {
       var global = arguments[1] === undefined ? false : arguments[1];
 
       for (var i = 0; i < arrayOfCircles.length; i++) {
+
         //The first circle to use in the collision check
         var c1 = arrayOfCircles[i];
         for (var j = i + 1; j < arrayOfCircles.length; j++) {
+
           //The second circle to use in the collision check
           var c2 = arrayOfCircles[j];
+
           //Check for a collision and bounce the circles apart if
           //they collide. Use an optional `mass` property on the sprite
           //to affect the bounciness of each marble
-          movingCircleCollision(c1, c2, global);
+          this.movingCircleCollision(c1, c2, global);
         }
       }
     }
@@ -1121,13 +1124,13 @@ var Bump = (function () {
       var extra = arguments[5] === undefined ? undefined : arguments[5];
 
       //Local references to bump's collision methods
-      var hitTestPoint = this.hitTestPoint,
-          hitTestRectangle = this.hitTestRectangle,
-          hitTestCircle = this.hitTestCircle,
-          movingCircleCollision = this.movingCircleCollision,
-          circleCollision = this.circleCollision,
-          hitTestCircleRectangle = this.hitTestCircleRectangle,
-          circleRectangleCollision = this.circleRectangleCollision;
+      var hitTestPoint = this.hitTestPoint.bind(this),
+          hitTestRectangle = this.hitTestRectangle.bind(this),
+          hitTestCircle = this.hitTestCircle.bind(this),
+          movingCircleCollision = this.movingCircleCollision.bind(this),
+          circleCollision = this.circleCollision.bind(this),
+          hitTestCircleRectangle = this.hitTestCircleRectangle.bind(this),
+          circleRectangleCollision = this.circleRectangleCollision.bind(this);
 
       var collision = undefined,
           aIsASprite = a.parent !== undefined,
