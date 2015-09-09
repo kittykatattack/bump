@@ -1,4 +1,4 @@
-Bump - A 2D Collision library Pixi Games
+Bump - A 2D Collision library for Pixi
 ========================================
 
 Bump is a lightweight suite of easy-to-use 2D collision methods for use with the
