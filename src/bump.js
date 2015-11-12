@@ -1,4 +1,4 @@
-export class Bump {
+class Bump {
   constructor(renderingEngine = PIXI) {
     if (renderingEngine === undefined) throw new Error("Please assign a rendering engine in the constructor before using bump.js"); 
 
@@ -968,14 +968,23 @@ export class Bump {
   `contain` can be used to contain a sprite with `x` and
   `y` properties inside a rectangular area.
 
-  The `contain` function takes two arguments: a sprite with `x` and `y`
-  properties, and an object literal with `x`, `y`, `width` and `height` properties.
+  The `contain` function takes four arguments: a sprite with `x` and `y`
+  properties, an object literal with `x`, `y`, `width` and `height` properties. The 
+  third argument is a Boolean (true/false) value that determines if the sprite
+  should bounce when it hits the edge of the container. The fourth argument
+  is an extra user-defined callback function that you can call when the
+  sprite hits the container
   ```js
-  contain(anySprite, {x: 0, y: 0, width: 512, height: 512});
+  contain(anySprite, {x: 0, y: 0, width: 512, height: 512}, true, callbackFunction);
   ```
   The code above will contain the sprite's position inside the 512 by
-  512 pixel area defined by the object. For example, you could contain
-  the a sprite inside a 512 by 512 area like this:
+  512 pixel area defined by the object. If the sprite hits the edges of
+  the container, it will bounce. The `callBackFunction` will run if 
+  there's a collision.
+
+  An additional feature of the `contain` method is that if the sprite
+  has a `mass` property, it will be used to dampen the sprite's bounce
+  in a natural looking way.
 
   If the sprite bumps into any of the containing object's boundaries,
   the `contain` function will return a value that tells you which side
@@ -998,7 +1007,7 @@ export class Bump {
   `collision` will be `undefined`. 
   */
 
-  contain(sprite, container) {
+  contain(sprite, container, bounce = false, extra = undefined) {
 
     //Create a set called `collision` to keep track of the
     //boundaries with which the sprite is colliding
@@ -1006,30 +1015,50 @@ export class Bump {
 
     //Left
     if (sprite.x < container.x) {
+      //Bounce the sprite if `bounce` is true
+      if (bounce) sprite.vx *= -1;
+
+      //If the sprite has `mass`, let the mass
+      //affect the sprite's velocity
+      if(sprite.mass) sprite.vx /= sprite.mass;
+
+      //Keep the sprite inside the container
       sprite.x = container.x;
+
+      //Add "left" to the collision set
       collision.add("left");
     }
 
     //Top
     if (sprite.y < container.y) {
+      if (bounce) sprite.vy *= -1;
+      if(sprite.mass) sprite.vy /= sprite.mass;
       sprite.y = container.y;
       collision.add("top");
     }
 
     //Right
     if (sprite.x + sprite.width > container.width) {
+      if (bounce) sprite.vx *= -1;
+      if(sprite.mass) sprite.vx /= sprite.mass;
       sprite.x = container.width - sprite.width;
       collision.add("right");
     }
 
     //Bottom
     if (sprite.y + sprite.height > container.height) {
+      if (bounce) sprite.vy *= -1;
+      if(sprite.mass) sprite.vy /= sprite.mass;
       sprite.y = container.height - sprite.height;
       collision.add("bottom");
     }
 
     //If there were no collisions, set `collision` to `undefined`
     if (collision.size === 0) collision = undefined;
+
+    //The `extra` function runs if there was a collision
+    //and `extra` has been defined
+    if (collision && extra) extra(collision);
 
     //Return the `collision` value
     return collision;

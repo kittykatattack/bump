@@ -5,6 +5,21 @@ Bump is a lightweight suite of easy-to-use 2D collision methods for use with the
 Pixi rendering engine. You can use these methods to make almost any
 kind of 2D action or arcade game.
 
+[Setting up](#settingup) <br>
+[Using Bump's collision methods](#using) <br>
+[Hit](#hit): A universal collision detection method <br>
+[hitTestPoint](#hittestpoint): Check whether a point is intersecting a sprite <br>
+[hitTestCircle](#hittestcircle): Check whether 2 circles are touching <br>
+[circleCollision](#circlecollision): Bounce a moving circle against a stationary circle <br>
+[movingCircleCollision](#movingcirclecollision): Bounce two moving circles apart <br>
+[hitTestRectangle](#hittestrectangle): Check whether two rectangular or square sprites are touching <br>
+[rectangleCollision](#rectanglecollision): Prevent two rectangular sprites from intersecting <br>
+[hitTestCircleRectangle](#hittestcirclerectangle): Check whether a rectangular and circular sprite are touching<br>
+[circleRectangleCollision](#circlerectanglecollision): Bounce a circular sprite against a rectangular sprite <br>
+[contain](#contain): Contain a sprite inside the boundaries of another rectangular sprite <br>
+
+hittestcirclerectangle
+<a id="settingup"></a>
 Installing and setting up Bump
 ------------------------------
 
@@ -26,6 +41,7 @@ b = new Bump(PIXI);
 The variable `b` (for "bump", of course!) now represents the running
 instance of Bump that you can use to access all of Bump’s collision methods.
 
+<a id="using"></a>
 Using Bump's collision methods
 ------------------------------
 
@@ -38,6 +54,7 @@ b.hitTestRectangle(spriteOne, spriteTwo);
 ```
 Here are all the collision methods you can use:
 
+<a id="hit"></a>
 ###`hit`
 
 `hit` is a universal collision function. It automatically detects the
@@ -140,6 +157,7 @@ However, the `hit` method is just a high-level wrapper for Bump's many
 lower level collision methods. If you prefer to use the lower-level
 methods, they're all listed next.
 
+<a id="hittestpoint"></a>
 ###`hitTestPoint`
 
 The most basic collision test is to check whether a point is
@@ -168,6 +186,7 @@ anySprite.circular = true;
 The sprite will now be interpreted as circular and have a new `radius`
 property which is equal to half the sprite's width.
 
+<a id="hittestcircle"></a>
 ###`hitTestCircle`
 
 If you want to check for a collision between two circular sprites, 
@@ -184,6 +203,7 @@ if (hitTestCircle(sprite1, sprite2)) {
 }
 ```
 
+<a id="circlecollision"></a>
 ###`circleCollision`
 
 If a moving circle hits a non-moving circle, you can create a collision 
@@ -204,6 +224,7 @@ makes the method use the sprites’ global coordinates. This is important
 if you want to check for collisions between sprites that have different 
 parent containers.
 
+<a id="movingcirclecollision"></a>
 ###`movingCircleCollision`
 
 You can create a collision reaction between two moving circles using 
@@ -261,6 +282,7 @@ It will automatically call `movingCircleCollision` on each pair of sprites to ma
 them bounce off one another. You now know most of the important techniques you need 
 to make a wide range of games using circular sprites.
 
+<a id="hittestrectangle"></a>
 ###`hitTestRectangle`
 
 To find out whether two rectangular sprites are overlapping, use a function called 
@@ -279,6 +301,7 @@ if (hitTestRectangle(rectangle1, rectangle2)) {
 }
 ```
 
+<a id="rectanglecollision"></a>
 ###`rectangleCollision`
 
 `rectangleCollision` make the rectangles behave as though they have
@@ -330,6 +353,7 @@ sprite when they collide. Its default value is `false`. (As with the all
 the other collision methods, you should set the final optional argument, 
 `global`, to `true` if you want to use the sprites’ global coordinates.)
 
+<a id="hittestcirclerectangle"></a>
 ###`hitTestCircleRectangle`
 
 `hitTestCircleRectangle` checks for a collision between a circular and
@@ -344,6 +368,7 @@ the circle is hitting the rectangle. It can have the value "topLeft",
 "bottomMiddle", or "bottomRight". If there’s no collision it will be
 `undefined`.
 
+<a id="circlerectanglecollision"></a>
 ###`circleRectangleCollision`
 
 Use `circleRectangleCollision` to make a circle bounce off a square’s sides or corners:
@@ -353,5 +378,49 @@ circleRectangleCollision(ball, box, true);
 Setting the optional third argument to `true` makes the sprites bounce apart, 
 and setting the fourth argument to `true` tells the method to use the 
 sprites’ global coordinates.
+
+<a id="contain"></a>
+###`contain`
+
+`contain` can be used to contain a sprite with `x` and
+`y` properties inside a rectangular area.
+
+The `contain` function takes four arguments: a sprite with `x` and `y`
+properties, an object literal with `x`, `y`, `width` and `height` properties. The 
+third argument is a Boolean (true/false) value that determines if the sprite
+should bounce when it hits the edge of the container. The fourth argument
+is an extra user-defined callback function that you can call when the
+sprite hits the container. (Only the first two arguments are required.)
+```js
+contain(anySprite, {x: 0, y: 0, width: 512, height: 512}, true, callbackFunction);
+```
+The code above will contain the sprite's position inside the 512 by
+512 pixel area defined by the object. If the sprite hits the edges of
+the container, it will bounce. The `callBackFunction` will run if 
+there's a collision.
+
+An additional feature of the `contain` method is that if the sprite
+has a `mass` property, that value will be used to dampen the sprite's bounce
+in a natural looking way.
+
+If the sprite bumps into any of the containing object's boundaries,
+the `contain` function will return a Set of string values that tells you which side
+the sprite bumped into: “left”, “top”, “right” or “bottom”. Here's how
+you could keep the sprite contained and also find out which boundary
+it hit:
+```js
+//Contain the sprite and find the collision value
+let collision = contain(anySprite, {x: 0, y: 0, width: 512, height: 512});
+
+//If there's a collision, display the boundary that the collision happened on
+if(collision) {
+  if collision.has("left") console.log("The sprite hit the left");  
+  if collision.has("top") console.log("The sprite hit the top");  
+  if collision.has("right") console.log("The sprite hit the right");  
+  if collision.has("bottom") console.log("The sprite hit the bottom");  
+}
+```
+If the sprite doesn't hit a boundary, the value of
+`collision` will be `undefined`. 
 
 
