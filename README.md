@@ -18,7 +18,6 @@ kind of 2D action or arcade game.
 [circleRectangleCollision](#circlerectanglecollision): Bounce a circular sprite against a rectangular sprite <br>
 [contain](#contain): Contain a sprite inside the boundaries of another rectangular sprite <br>
 
-hittestcirclerectangle
 <a id="settingup"></a>
 Installing and setting up Bump
 ------------------------------
