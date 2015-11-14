@@ -1009,12 +1009,41 @@ class Bump {
 
   contain(sprite, container, bounce = false, extra = undefined) {
 
+    //Helper methods that compensate for any possible shift the the
+    //sprites' anchor points
+    let nudgeAnchor = (o, value, axis) => {
+      if (o.anchor !== undefined) {
+        if (o.anchor[axis] !== 0) {
+          return value * ((1 - o.anchor[axis]) - o.anchor[axis]);
+        } else {
+          return value;
+        }
+      } else {
+        return value; 
+      }
+    };
+
+    let compensateForAnchor = (o, value, axis) => {
+      if (o.anchor !== undefined) {
+        if (o.anchor[axis] !== 0) {
+          return value * o.anchor[axis];
+        } else {
+          return 0;
+        }
+      } else {
+        return 0; 
+      }
+    };
+
+    let compensateForAnchors = (a, b, property1, property2) => {
+       return compensateForAnchor(a, a[property1], property2) + compensateForAnchor(b, b[property1], property2)
+    };    
     //Create a set called `collision` to keep track of the
     //boundaries with which the sprite is colliding
     var collision = new Set();
 
     //Left
-    if (sprite.x < container.x) {
+    if (sprite.x - compensateForAnchor(sprite, sprite.width, "x") < container.x - sprite.parent.gx - compensateForAnchor(container, container.width, "x")) {
       //Bounce the sprite if `bounce` is true
       if (bounce) sprite.vx *= -1;
 
@@ -1023,33 +1052,33 @@ class Bump {
       if(sprite.mass) sprite.vx /= sprite.mass;
 
       //Keep the sprite inside the container
-      sprite.x = container.x;
+      sprite.x = container.x - sprite.parent.gx + compensateForAnchor(sprite, sprite.width, "x") - compensateForAnchor(container, container.width, "x");
 
       //Add "left" to the collision set
       collision.add("left");
     }
 
     //Top
-    if (sprite.y < container.y) {
+    if (sprite.y - compensateForAnchor(sprite, sprite.height, "y") < container.y - sprite.parent.gy - compensateForAnchor(container, container.height, "y")) {
       if (bounce) sprite.vy *= -1;
       if(sprite.mass) sprite.vy /= sprite.mass;
-      sprite.y = container.y;
+      sprite.y = container.x - sprite.parent.gy + compensateForAnchor(sprite, sprite.height, "y") - compensateForAnchor(container, container.height, "y");
       collision.add("top");
     }
 
     //Right
-    if (sprite.x + sprite.width > container.width) {
+    if (sprite.x - compensateForAnchor(sprite, sprite.width, "x") + sprite.width > container.width - compensateForAnchor(container, container.width, "x")) {
       if (bounce) sprite.vx *= -1;
       if(sprite.mass) sprite.vx /= sprite.mass;
-      sprite.x = container.width - sprite.width;
+      sprite.x = container.width - sprite.width + compensateForAnchor(sprite, sprite.width, "x") - compensateForAnchor(container, container.width, "x");
       collision.add("right");
     }
 
     //Bottom
-    if (sprite.y + sprite.height > container.height) {
+    if (sprite.y - compensateForAnchor(sprite, sprite.height, "y") + sprite.height > container.height - compensateForAnchor(container, container.height, "y")) {
       if (bounce) sprite.vy *= -1;
       if(sprite.mass) sprite.vy /= sprite.mass;
-      sprite.y = container.height - sprite.height;
+      sprite.y = container.height - sprite.height + compensateForAnchor(sprite, sprite.height, "y") - compensateForAnchor(container, container.height, "y");
       collision.add("bottom");
     }
 
@@ -1063,6 +1092,29 @@ class Bump {
     //Return the `collision` value
     return collision;
   }
+
+  /*
+  _getCenter
+  ----------
+
+  A utility that finds the center point of the sprite. If it's anchor point is the
+  sprite's top left corner, then the center is calculated from that point.
+  If the anchor point has been shifted, then the anchor x/y point is used as the sprite's center
+  */
+
+  _getCenter(o, dimension, axis) {
+    if (o.anchor !== undefined) {
+      if (o.anchor[axis] !== 0) {
+        return 0;
+      } else {
+        //console.log(o.anchor[axis])
+        return dimension / 2;
+      }
+    } else {
+      return dimension; 
+    }
+  }
+  
 
   /*
   hit
