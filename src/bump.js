@@ -1132,6 +1132,7 @@ class Bump {
         movingCircleCollision = this.movingCircleCollision.bind(this),
         circleCollision = this.circleCollision.bind(this),
         hitTestCircleRectangle = this.hitTestCircleRectangle.bind(this),
+        rectangleCollision = this.rectangleCollision.bind(this),
         circleRectangleCollision = this.circleRectangleCollision.bind(this);
 
     let collision,
