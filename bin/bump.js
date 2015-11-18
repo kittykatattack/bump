@@ -6,7 +6,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var Bump = (function () {
   function Bump() {
-    var renderingEngine = arguments[0] === undefined ? PIXI : arguments[0];
+    var renderingEngine = arguments.length <= 0 || arguments[0] === undefined ? PIXI : arguments[0];
 
     _classCallCheck(this, Bump);
 
@@ -33,36 +33,42 @@ var Bump = (function () {
             get: function get() {
               return sprite.getGlobalPosition().x;
             },
+
             enumerable: true, configurable: true
           },
           "gy": {
             get: function get() {
               return sprite.getGlobalPosition().y;
             },
+
             enumerable: true, configurable: true
           },
           "centerX": {
             get: function get() {
               return sprite.x + sprite.width / 2;
             },
+
             enumerable: true, configurable: true
           },
           "centerY": {
             get: function get() {
               return sprite.y + sprite.height / 2;
             },
+
             enumerable: true, configurable: true
           },
           "halfWidth": {
             get: function get() {
               return sprite.width / 2;
             },
+
             enumerable: true, configurable: true
           },
           "halfHeight": {
             get: function get() {
               return sprite.height / 2;
             },
+
             enumerable: true, configurable: true
           }
         });
@@ -72,6 +78,7 @@ var Bump = (function () {
             get: function get() {
               return sprite.width / 2;
             },
+
             enumerable: true, configurable: true
           });
         }
@@ -81,8 +88,6 @@ var Bump = (function () {
       //as having these new properties
       sprite._bumpPropertiesAdded = true;
     }
-  }, {
-    key: "hitTestPoint",
 
     /*
     hitTestPoint
@@ -95,6 +100,8 @@ var Bump = (function () {
     the shape as a circle.
     */
 
+  }, {
+    key: "hitTestPoint",
     value: function hitTestPoint(point, sprite) {
 
       //Add collision properties
@@ -145,8 +152,6 @@ var Bump = (function () {
       //`hit` will be either `true` or `false`
       return hit;
     }
-  }, {
-    key: "hitTestCircle",
 
     /*
     hitTestCircle
@@ -157,8 +162,10 @@ var Bump = (function () {
     b. A sprite object with `centerX`, `centerY` and `radius`.
     */
 
+  }, {
+    key: "hitTestCircle",
     value: function hitTestCircle(c1, c2) {
-      var global = arguments[2] === undefined ? false : arguments[2];
+      var global = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
 
       //Add collision properties
       if (!c1._bumpPropertiesAdded) this.addCollisionProperties(c1);
@@ -195,8 +202,6 @@ var Bump = (function () {
       //`hit` will be either `true` or `false`
       return hit;
     }
-  }, {
-    key: "circleCollision",
 
     /*
     circleCollision
@@ -211,9 +216,11 @@ var Bump = (function () {
     The sprites can contain an optional mass property that should be greater than 1.
      */
 
+  }, {
+    key: "circleCollision",
     value: function circleCollision(c1, c2) {
-      var bounce = arguments[2] === undefined ? false : arguments[2];
-      var global = arguments[3] === undefined ? false : arguments[3];
+      var bounce = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+      var global = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
 
       //Add collision properties
       if (!c1._bumpPropertiesAdded) this.addCollisionProperties(c1);
@@ -291,8 +298,6 @@ var Bump = (function () {
       }
       return hit;
     }
-  }, {
-    key: "movingCircleCollision",
 
     /*
     movingCircleCollision
@@ -304,8 +309,10 @@ var Bump = (function () {
     The sprites can contain an optional mass property that should be greater than 1.
      */
 
+  }, {
+    key: "movingCircleCollision",
     value: function movingCircleCollision(c1, c2) {
-      var global = arguments[2] === undefined ? false : arguments[2];
+      var global = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
 
       //Add collision properties
       if (!c1._bumpPropertiesAdded) this.addCollisionProperties(c1);
@@ -443,9 +450,6 @@ var Bump = (function () {
       }
       return hit;
     }
-  }, {
-    key: "multipleCircleCollision",
-
     /*
     multipleCircleCollision
     -----------------------
@@ -453,8 +457,10 @@ var Bump = (function () {
     all the other circles in an array, using `movingCircleCollision` (above)
     */
 
+  }, {
+    key: "multipleCircleCollision",
     value: function multipleCircleCollision(arrayOfCircles) {
-      var global = arguments[1] === undefined ? false : arguments[1];
+      var global = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
       for (var i = 0; i < arrayOfCircles.length; i++) {
 
@@ -472,8 +478,6 @@ var Bump = (function () {
         }
       }
     }
-  }, {
-    key: "rectangleCollision",
 
     /*
     rectangleCollision
@@ -487,9 +491,11 @@ var Bump = (function () {
     should bounce off the second sprite.
     */
 
+  }, {
+    key: "rectangleCollision",
     value: function rectangleCollision(r1, r2) {
-      var bounce = arguments[2] === undefined ? false : arguments[2];
-      var global = arguments[3] === undefined ? true : arguments[3];
+      var bounce = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+      var global = arguments.length <= 3 || arguments[3] === undefined ? true : arguments[3];
 
       //Add collision properties
       if (!r1._bumpPropertiesAdded) this.addCollisionProperties(r1);
@@ -560,42 +566,43 @@ var Bump = (function () {
               */
             }
           } else {
-            //The collision is happening on the Y axis
-            //But on which side? vx can tell us
+              //The collision is happening on the Y axis
+              //But on which side? vx can tell us
 
-            if (vx > 0) {
-              collision = "left";
-              //Move the rectangle out of the collision
-              r1.x = r1.x + overlapX;
-            } else {
-              collision = "right";
-              //Move the rectangle out of the collision
-              r1.x = r1.x - overlapX;
+              if (vx > 0) {
+                collision = "left";
+                //Move the rectangle out of the collision
+                r1.x = r1.x + overlapX;
+              } else {
+                collision = "right";
+                //Move the rectangle out of the collision
+                r1.x = r1.x - overlapX;
+              }
+
+              //Bounce
+              if (bounce) {
+                r1.vx *= -1;
+
+                /*Alternative
+                //Find the bounce surface's vx and vy properties
+                var s = {};
+                s.vx = 0;
+                s.vy = r2.y - r2.y + r2.height;
+                 //Bounce r1 off the surface
+                bounceOffSurface(r1, s);
+                */
+              }
             }
-
-            //Bounce
-            if (bounce) {
-              r1.vx *= -1;
-
-              /*Alternative
-              //Find the bounce surface's vx and vy properties
-              var s = {};
-              s.vx = 0;
-              s.vy = r2.y - r2.y + r2.height;
-               //Bounce r1 off the surface
-              bounceOffSurface(r1, s);
-              */
-            }
+        } else {
+            //No collision
           }
-        } else {}
       } else {}
+        //No collision
 
-      //Return the collision string. it will be either "top", "right",
-      //"bottom", or "left" depending on which side of r1 is touching r2.
+        //Return the collision string. it will be either "top", "right",
+        //"bottom", or "left" depending on which side of r1 is touching r2.
       return collision;
     }
-  }, {
-    key: "hitTestRectangle",
 
     /*
     hitTestRectangle
@@ -606,8 +613,10 @@ var Bump = (function () {
     b. A sprite object with `centerX`, `centerY`, `halfWidth` and `halfHeight` properties.
      */
 
+  }, {
+    key: "hitTestRectangle",
     value: function hitTestRectangle(r1, r2) {
-      var global = arguments[2] === undefined ? false : arguments[2];
+      var global = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
 
       //Add collision properties
       if (!r1._bumpPropertiesAdded) this.addCollisionProperties(r1);
@@ -657,8 +666,6 @@ var Bump = (function () {
       //`hit` will be either `true` or `false`
       return hit;
     }
-  }, {
-    key: "hitTestCircleRectangle",
 
     /*
     hitTestCircleRectangle
@@ -669,8 +676,10 @@ var Bump = (function () {
     b. A sprite object with `centerX`, `centerY`, `halfWidth` and `halfHeight` properties.
      */
 
+  }, {
+    key: "hitTestCircleRectangle",
     value: function hitTestCircleRectangle(c1, r1) {
-      var global = arguments[2] === undefined ? false : arguments[2];
+      var global = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
 
       //Add collision properties
       if (!r1._bumpPropertiesAdded) this.addCollisionProperties(r1);
@@ -718,26 +727,26 @@ var Bump = (function () {
       //below the bottom edge
       else if (c1y > r1y + r1.halfHeight) {
 
-        //If it is, we need to check whether it's in the bottom left,
-        //bottom center, or bottom right
-        if (c1x < r1x - 1 - r1.halfWidth) {
-          region = "bottomLeft";
-        } else if (c1x > r1x + 1 + r1.halfWidth) {
-          region = "bottomRight";
-        } else {
-          region = "bottomMiddle";
+          //If it is, we need to check whether it's in the bottom left,
+          //bottom center, or bottom right
+          if (c1x < r1x - 1 - r1.halfWidth) {
+            region = "bottomLeft";
+          } else if (c1x > r1x + 1 + r1.halfWidth) {
+            region = "bottomRight";
+          } else {
+            region = "bottomMiddle";
+          }
         }
-      }
 
-      //The circle isn't above the top edge or below the bottom edge,
-      //so it must be on the left or right side
-      else {
-        if (c1x < r1x - r1.halfWidth) {
-          region = "leftMiddle";
-        } else {
-          region = "rightMiddle";
-        }
-      }
+        //The circle isn't above the top edge or below the bottom edge,
+        //so it must be on the left or right side
+        else {
+            if (c1x < r1x - r1.halfWidth) {
+              region = "leftMiddle";
+            } else {
+              region = "rightMiddle";
+            }
+          }
 
       //Is this the circle touching the flat sides
       //of the rectangle?
@@ -750,32 +759,32 @@ var Bump = (function () {
       //The circle is touching one of the corners, so do a
       //circle vs. point collision test
       else {
-        var point = {};
+          var point = {};
 
-        switch (region) {
-          case "topLeft":
-            point.x = r1x;
-            point.y = r1y;
-            break;
+          switch (region) {
+            case "topLeft":
+              point.x = r1x;
+              point.y = r1y;
+              break;
 
-          case "topRight":
-            point.x = r1x + r1.width;
-            point.y = r1y;
-            break;
+            case "topRight":
+              point.x = r1x + r1.width;
+              point.y = r1y;
+              break;
 
-          case "bottomLeft":
-            point.x = r1x;
-            point.y = r1y + r1.height;
-            break;
+            case "bottomLeft":
+              point.x = r1x;
+              point.y = r1y + r1.height;
+              break;
 
-          case "bottomRight":
-            point.x = r1x + r1.width;
-            point.y = r1y + r1.height;
+            case "bottomRight":
+              point.x = r1x + r1.width;
+              point.y = r1y + r1.height;
+          }
+
+          //Check for a collision between the circle and the point
+          collision = hitTestCirclePoint(c1, point, global);
         }
-
-        //Check for a collision between the circle and the point
-        collision = hitTestCirclePoint(c1, point, global);
-      }
 
       //Return the result of the collision.
       //The return value will be `undefined` if there's no collision
@@ -785,8 +794,6 @@ var Bump = (function () {
         return collision;
       }
     }
-  }, {
-    key: "hitTestCirclePoint",
 
     /*
     hitTestCirclePoint
@@ -797,8 +804,10 @@ var Bump = (function () {
     b. A point object with `x` and `y` properties.
      */
 
+  }, {
+    key: "hitTestCirclePoint",
     value: function hitTestCirclePoint(c1, point) {
-      var global = arguments[2] === undefined ? false : arguments[2];
+      var global = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
 
       //Add collision properties
       if (!c1._bumpPropertiesAdded) this.addCollisionProperties(c1);
@@ -815,8 +824,6 @@ var Bump = (function () {
       point.gy = point.y;
       return hitTestCircle(c1, point, global);
     }
-  }, {
-    key: "circleRectangleCollision",
 
     /*
     circleRectangleCollision
@@ -827,9 +834,11 @@ var Bump = (function () {
     b. A sprite object with `centerX`, `centerY`, `halfWidth` and `halfHeight` properties.
      */
 
+  }, {
+    key: "circleRectangleCollision",
     value: function circleRectangleCollision(c1, r1) {
-      var bounce = arguments[2] === undefined ? false : arguments[2];
-      var global = arguments[3] === undefined ? false : arguments[3];
+      var bounce = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+      var global = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
 
       //Add collision properties
       if (!r1._bumpPropertiesAdded) this.addCollisionProperties(r1);
@@ -871,26 +880,26 @@ var Bump = (function () {
       //The circle isn't above the top edge, so it might be
       //below the bottom edge
       else if (c1y > r1y + r1.halfHeight) {
-        //If it is, we need to check whether it's in the bottom left,
-        //bottom center, or bottom right
-        if (c1x < r1x - 1 - r1.halfWidth) {
-          region = "bottomLeft";
-        } else if (c1x > r1x + 1 + r1.halfWidth) {
-          region = "bottomRight";
-        } else {
-          region = "bottomMiddle";
+          //If it is, we need to check whether it's in the bottom left,
+          //bottom center, or bottom right
+          if (c1x < r1x - 1 - r1.halfWidth) {
+            region = "bottomLeft";
+          } else if (c1x > r1x + 1 + r1.halfWidth) {
+            region = "bottomRight";
+          } else {
+            region = "bottomMiddle";
+          }
         }
-      }
 
-      //The circle isn't above the top edge or below the bottom edge,
-      //so it must be on the left or right side
-      else {
-        if (c1x < r1x - r1.halfWidth) {
-          region = "leftMiddle";
-        } else {
-          region = "rightMiddle";
-        }
-      }
+        //The circle isn't above the top edge or below the bottom edge,
+        //so it must be on the left or right side
+        else {
+            if (c1x < r1x - r1.halfWidth) {
+              region = "leftMiddle";
+            } else {
+              region = "rightMiddle";
+            }
+          }
 
       //Is this the circle touching the flat sides
       //of the rectangle?
@@ -903,32 +912,32 @@ var Bump = (function () {
       //The circle is touching one of the corners, so do a
       //circle vs. point collision test
       else {
-        var point = {};
+          var point = {};
 
-        switch (region) {
-          case "topLeft":
-            point.x = r1x;
-            point.y = r1y;
-            break;
+          switch (region) {
+            case "topLeft":
+              point.x = r1x;
+              point.y = r1y;
+              break;
 
-          case "topRight":
-            point.x = r1x + r1.width;
-            point.y = r1y;
-            break;
+            case "topRight":
+              point.x = r1x + r1.width;
+              point.y = r1y;
+              break;
 
-          case "bottomLeft":
-            point.x = r1x;
-            point.y = r1y + r1.height;
-            break;
+            case "bottomLeft":
+              point.x = r1x;
+              point.y = r1y + r1.height;
+              break;
 
-          case "bottomRight":
-            point.x = r1x + r1.width;
-            point.y = r1y + r1.height;
+            case "bottomRight":
+              point.x = r1x + r1.width;
+              point.y = r1y + r1.height;
+          }
+
+          //Check for a collision between the circle and the point
+          collision = circlePointCollision(c1, point, bounce, global);
         }
-
-        //Check for a collision between the circle and the point
-        collision = circlePointCollision(c1, point, bounce, global);
-      }
 
       if (collision) {
         return region;
@@ -936,8 +945,6 @@ var Bump = (function () {
         return collision;
       }
     }
-  }, {
-    key: "circlePointCollision",
 
     /*
     circlePointCollision
@@ -948,9 +955,11 @@ var Bump = (function () {
     b. A point object with `x` and `y` properties.
      */
 
+  }, {
+    key: "circlePointCollision",
     value: function circlePointCollision(c1, point) {
-      var bounce = arguments[2] === undefined ? false : arguments[2];
-      var global = arguments[3] === undefined ? false : arguments[3];
+      var bounce = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+      var global = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
 
       //Add collision properties
       if (!c1._bumpPropertiesAdded) this.addCollisionProperties(c1);
@@ -967,8 +976,6 @@ var Bump = (function () {
       point.gy = point.y;
       return circleCollision(c1, point, bounce, global);
     }
-  }, {
-    key: "bounceOffSurface",
 
     /*
     bounceOffSurface
@@ -983,6 +990,8 @@ var Bump = (function () {
     be used to dampen the bounce effect.
     */
 
+  }, {
+    key: "bounceOffSurface",
     value: function bounceOffSurface(o, s) {
 
       //Add collision properties
@@ -1036,8 +1045,6 @@ var Bump = (function () {
       o.vx = bounce.x / mass;
       o.vy = bounce.y / mass;
     }
-  }, {
-    key: "contain",
 
     /*
     contain
@@ -1080,9 +1087,11 @@ var Bump = (function () {
     `collision` will be `undefined`. 
     */
 
+  }, {
+    key: "contain",
     value: function contain(sprite, container) {
-      var bounce = arguments[2] === undefined ? false : arguments[2];
-      var extra = arguments[3] === undefined ? undefined : arguments[3];
+      var bounce = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+      var extra = arguments.length <= 3 || arguments[3] === undefined ? undefined : arguments[3];
 
       //Helper methods that compensate for any possible shift the the
       //sprites' anchor points
@@ -1167,8 +1176,6 @@ var Bump = (function () {
       //Return the `collision` value
       return collision;
     }
-  }, {
-    key: "_getCenter",
 
     /*
     _getCenter
@@ -1178,6 +1185,8 @@ var Bump = (function () {
     If the anchor point has been shifted, then the anchor x/y point is used as the sprite's center
     */
 
+  }, {
+    key: "_getCenter",
     value: function _getCenter(o, dimension, axis) {
       if (o.anchor !== undefined) {
         if (o.anchor[axis] !== 0) {
@@ -1190,8 +1199,6 @@ var Bump = (function () {
         return dimension;
       }
     }
-  }, {
-    key: "hit",
 
     /*
     hit
@@ -1200,10 +1207,13 @@ var Bump = (function () {
     between rectangles, circles, and points.
     */
 
-    value: function hit(a, b, react, bounce, global) {
-      if (react === undefined) react = false;
-      if (bounce === undefined) bounce = false;
-      var extra = arguments[5] === undefined ? undefined : arguments[5];
+  }, {
+    key: "hit",
+    value: function hit(a, b) {
+      var react = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+      var bounce = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+      var global = arguments[4];
+      var extra = arguments.length <= 5 || arguments[5] === undefined ? undefined : arguments[5];
 
       //Local references to bump's collision methods
       var hitTestPoint = this.hitTestPoint.bind(this),
@@ -1260,12 +1270,12 @@ var Bump = (function () {
         //They're not both sprites, so what are they?
         //Is `a` not a sprite and does it have x and y properties?
         else if (bIsASprite && !(a.x === undefined) && !(a.y === undefined)) {
-          //Yes, so this is a point vs. sprite collision test
-          return hitTestPoint(a, b);
-        } else {
-          //The user is trying to test some incompatible objects
-          throw new Error("I'm sorry, " + a + " and " + b + " cannot be use together in a collision test.'");
-        }
+            //Yes, so this is a point vs. sprite collision test
+            return hitTestPoint(a, b);
+          } else {
+            //The user is trying to test some incompatible objects
+            throw new Error("I'm sorry, " + a + " and " + b + " cannot be use together in a collision test.'");
+          }
       }
 
       function spriteVsArray() {
@@ -1291,17 +1301,17 @@ var Bump = (function () {
         }
         //Yes, the circles should react to the collision
         else {
-          //Are they both moving?
-          if (a.vx + a.vy !== 0 && b.vx + b.vy !== 0) {
-            //Yes, they are both moving
-            //(moving circle collisions always bounce apart so there's
-            //no need for the third, `bounce`, argument)
-            return movingCircleCollision(a, b, global);
-          } else {
-            //No, they're not both moving
-            return circleCollision(a, b, bounce, global);
+            //Are they both moving?
+            if (a.vx + a.vy !== 0 && b.vx + b.vy !== 0) {
+              //Yes, they are both moving
+              //(moving circle collisions always bounce apart so there's
+              //no need for the third, `bounce`, argument)
+              return movingCircleCollision(a, b, global);
+            } else {
+              //No, they're not both moving
+              return circleCollision(a, b, bounce, global);
+            }
           }
-        }
       }
 
       function rectangleVsRectangle(a, b) {
@@ -1328,8 +1338,4 @@ var Bump = (function () {
 
   return Bump;
 })();
-
-//No collision
-
-//No collision
 //# sourceMappingURL=bump.js.map
