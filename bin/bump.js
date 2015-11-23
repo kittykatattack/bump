@@ -89,6 +89,16 @@ var Bump = (function () {
       sprite._bumpPropertiesAdded = true;
     }
 
+    //`compensateForAnchor` checks whether the sprite's anchor x/y point
+    //has been shifted and adds `_xAnchorOffset` and `_yAnchorOffset`
+    //properties to the sprite to compensate for this
+
+  }, {
+    key: "anchorOffset",
+    value: function anchorOffset(dimension) {
+      return;
+    }
+
     /*
     hitTestPoint
     ------------
@@ -129,10 +139,10 @@ var Bump = (function () {
       if (shape === "rectangle") {
 
         //Get the position of the sprite's edges
-        left = sprite.x;
-        right = sprite.x + sprite.width;
-        top = sprite.y;
-        bottom = sprite.y + sprite.height;
+        left = sprite.x - sprite.anchor.x * sprite.width;
+        right = sprite.x + sprite.width - sprite.anchor.y * sprite.width;
+        top = sprite.y - sprite.anchor.y * sprite.height;
+        bottom = sprite.y + sprite.height - sprite.anchor.y * sprite.height;
 
         //Find out if the point is intersecting the rectangle
         hit = point.x > left && point.x < right && point.y > top && point.y < bottom;
@@ -140,13 +150,16 @@ var Bump = (function () {
 
       //Circle
       if (shape === "circle") {
+
         //Find the distance between the point and the
         //center of the circle
-        vx = point.x - sprite.centerX, vy = point.y - sprite.centerY, magnitude = Math.sqrt(vx * vx + vy * vy);
+        var _vx = point.x - sprite.x - sprite.width / 2 + sprite.anchor.x * sprite.width,
+            _vy = point.y - sprite.y - sprite.height / 2 + sprite.anchor.y * sprite.height,
+            _magnitude = Math.sqrt(_vx * _vx + _vy * _vy);
 
         //The point is intersecting the circle if the magnitude
         //(distance) is less than the circle's radius
-        hit = magnitude < sprite.radius;
+        hit = _magnitude < sprite.radius;
       }
 
       //`hit` will be either `true` or `false`
@@ -1174,6 +1187,53 @@ var Bump = (function () {
       if (collision && extra) extra(collision);
 
       //Return the `collision` value
+      return collision;
+    }
+
+    //`outsideBounds` checks whether a sprite is outide the boundary of
+    //another object. It returns an object called `collision`. `collision` will be `undefined` if there's no
+    //collision. But if there is a collision, `collision` will be
+    //returned as a Set containg strings that tell you which boundary
+    //side was crossed: "left", "right", "top" or "bottom"
+
+  }, {
+    key: "outsideBounds",
+    value: function outsideBounds(s, bounds, extra) {
+
+      var x = bounds.x,
+          y = bounds.y,
+          width = bounds.width,
+          height = bounds.height;
+
+      //The `collision` object is used to store which
+      //side of the containing rectangle the sprite hits
+      var collision = new Set();
+
+      //Left
+      if (s.x < x - s.width) {
+        collision.add("left");
+      }
+      //Top
+      if (s.y < y - s.height) {
+        collision.add("top");
+      }
+      //Right
+      if (s.x > width + s.width) {
+        collision.add("right");
+      }
+      //Bottom
+      if (s.y > height + s.height) {
+        collision.add("bottom");
+      }
+
+      //If there were no collisions, set `collision` to `undefined`
+      if (collision.size === 0) collision = undefined;
+
+      //The `extra` function runs if there was a collision
+      //and `extra` has been defined
+      if (collision && extra) extra(collision);
+
+      //Return the `collision` object
       return collision;
     }
 

@@ -56,6 +56,14 @@ class Bump {
     sprite._bumpPropertiesAdded = true;
   }
 
+  //`compensateForAnchor` checks whether the sprite's anchor x/y point
+  //has been shifted and adds `_xAnchorOffset` and `_yAnchorOffset`
+  //properties to the sprite to compensate for this
+  anchorOffset(dimension) {
+    return 
+  
+  }
+
   /*
   hitTestPoint
   ------------
@@ -87,10 +95,10 @@ class Bump {
     if (shape === "rectangle") {
 
       //Get the position of the sprite's edges
-      left = sprite.x;
-      right = sprite.x + sprite.width;
-      top = sprite.y;
-      bottom = sprite.y + sprite.height;
+      left = sprite.x - (sprite.anchor.x * sprite.width);
+      right = sprite.x + sprite.width - (sprite.anchor.y * sprite.width);
+      top = sprite.y - (sprite.anchor.y * sprite.height);
+      bottom = sprite.y + sprite.height - (sprite.anchor.y * sprite.height);
 
       //Find out if the point is intersecting the rectangle
       hit = point.x > left && point.x < right && point.y > top && point.y < bottom;
@@ -98,11 +106,12 @@ class Bump {
 
     //Circle
     if (shape === "circle") {
+
       //Find the distance between the point and the
       //center of the circle
-      vx = point.x - sprite.centerX,
-      vy = point.y - sprite.centerY,
-      magnitude = Math.sqrt(vx * vx + vy * vy);
+      let vx = point.x - sprite.x - (sprite.width / 2) + (sprite.anchor.x * sprite.width),
+          vy = point.y - sprite.y - (sprite.height / 2) + (sprite.anchor.y * sprite.height),
+          magnitude = Math.sqrt(vx * vx + vy * vy);
 
       //The point is intersecting the circle if the magnitude
       //(distance) is less than the circle's radius
@@ -1040,7 +1049,7 @@ class Bump {
     };    
     //Create a set called `collision` to keep track of the
     //boundaries with which the sprite is colliding
-    var collision = new Set();
+    let collision = new Set();
 
     //Left
     if (sprite.x - compensateForAnchor(sprite, sprite.width, "x") < container.x - sprite.parent.gx - compensateForAnchor(container, container.width, "x")) {
@@ -1090,6 +1099,50 @@ class Bump {
     if (collision && extra) extra(collision);
 
     //Return the `collision` value
+    return collision;
+  }
+
+  //`outsideBounds` checks whether a sprite is outide the boundary of
+  //another object. It returns an object called `collision`. `collision` will be `undefined` if there's no
+  //collision. But if there is a collision, `collision` will be
+  //returned as a Set containg strings that tell you which boundary
+  //side was crossed: "left", "right", "top" or "bottom" 
+  outsideBounds(s, bounds, extra) {
+
+    let x = bounds.x,
+        y = bounds.y,
+        width = bounds.width,
+        height = bounds.height;
+
+    //The `collision` object is used to store which
+    //side of the containing rectangle the sprite hits
+    let collision = new Set();
+
+    //Left
+    if (s.x < x - s.width) {
+      collision.add("left");
+    }
+    //Top
+    if (s.y < y - s.height) {
+      collision.add("top");
+    }
+    //Right
+    if (s.x > width + s.width) {
+      collision.add("right");
+    }
+    //Bottom
+    if (s.y > height + s.height) {
+      collision.add("bottom");
+    }
+
+    //If there were no collisions, set `collision` to `undefined`
+    if (collision.size === 0) collision = undefined;
+
+    //The `extra` function runs if there was a collision
+    //and `extra` has been defined
+    if (collision && extra) extra(collision);
+
+    //Return the `collision` object
     return collision;
   }
 
