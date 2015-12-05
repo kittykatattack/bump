@@ -44,7 +44,7 @@ class Bump {
         "xAnchorOffset": {
           get(){
             if (sprite.anchor !== undefined) {
-              return o.height * o.anchor.x;
+              return sprite.height * sprite.anchor.x;
             } else {
               return 0;
             }
@@ -54,7 +54,7 @@ class Bump {
         "yAnchorOffset": {
           get(){
             if (sprite.anchor !== undefined) {
-              return o.width * o.anchor.y;
+              return sprite.width * sprite.anchor.y;
             } else {
               return 0;
             }
