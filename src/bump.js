@@ -11,11 +11,102 @@ class Bump {
     }
   }
 
+  //`addCollisionProperties` adds extra properties to sprites to help
+  //simplify the collision code. It won't add these properties if they
+  //already exist on the sprite. After these properties have been
+  //added, this methods adds a Boolean property to the sprite called `_bumpPropertiesAdded` 
+  //and sets it to `true` to flag that the sprite has these
+  //new properties
   addCollisionProperties(sprite) {
 
     //Add properties to Pixi sprites
     if (this.renderer === "pixi") {
 
+      //gx
+      if (sprite.gx === undefined) {
+        Object.defineProperty(sprite, "gx", {
+          get(){return sprite.getGlobalPosition().x},
+          enumerable: true, configurable: true
+        });
+      }
+
+      //gy
+      if (sprite.gy === undefined) {
+        Object.defineProperty(sprite, "gy", {
+          get(){return sprite.getGlobalPosition().y},
+          enumerable: true, configurable: true
+        });
+      }
+      
+      //centerX
+      if (sprite.centerX === undefined) {
+        Object.defineProperty(sprite, "centerX", {
+          get(){return sprite.x + sprite.width / 2},
+          enumerable: true, configurable: true
+        });
+      }
+
+      //centerY
+      if (sprite.centerY === undefined) {
+        Object.defineProperty(sprite, "centerY", {
+          get(){return sprite.y + sprite.height / 2},
+          enumerable: true, configurable: true
+        });
+      }
+      
+      //halfWidth
+      if (sprite.halfWidth === undefined) {
+        Object.defineProperty(sprite, "halfWidth", {
+          get(){return sprite.width / 2},
+          enumerable: true, configurable: true
+        });
+      }
+      
+      //halfHeight
+      if (sprite.halfHeight === undefined) {
+        Object.defineProperty(sprite, "halfHeight", {
+          get(){return sprite.height / 2},
+          enumerable: true, configurable: true
+        });
+      }
+      
+      //xAnchorOffset
+      if (sprite.xAnchorOffset === undefined) {
+        Object.defineProperty(sprite, "xAnchorOffset ", {
+          get(){
+            if (sprite.anchor !== undefined) {
+              return sprite.height * sprite.anchor.x;
+            } else {
+              return 0;
+            }
+          },
+          enumerable: true, configurable: true
+        });
+      }
+      
+      //yAnchorOffset
+      if (sprite.yAnchorOffset === undefined) {
+        Object.defineProperty(sprite, "yAnchorOffset ", {
+          get(){
+            if (sprite.anchor !== undefined) {
+              return sprite.width * sprite.anchor.y;
+            } else {
+              return 0;
+            }
+          },
+          enumerable: true, configurable: true
+        });
+      }
+
+      if (sprite.circular && sprite.radius === undefined) {
+        Object.defineProperty(sprite, "radius", {
+          get(){return sprite.width / 2},
+          enumerable: true, configurable: true
+        });
+      }
+
+      //Earlier code - not needed now.
+      /*
       Object.defineProperties(sprite, {
         "gx": {
           get(){return sprite.getGlobalPosition().x},
@@ -62,26 +153,12 @@ class Bump {
           enumerable: true, configurable: true
         }
       });
-
-      if (sprite.circular) {
-        Object.defineProperty(sprite, "radius", {
-          get(){return sprite.width / 2},
-          enumerable: true, configurable: true
-        });
-      }
+      */
     }
 
     //Add a Boolean `_bumpPropertiesAdded` property to the sprite to flag it
     //as having these new properties
     sprite._bumpPropertiesAdded = true;
-  }
-
-  //`compensateForAnchor` checks whether the sprite's anchor x/y point
-  //has been shifted and adds `_xAnchorOffset` and `_yAnchorOffset`
-  //properties to the sprite to compensate for this
-  anchorOffset(dimension) {
-    return 
-  
   }
 
   /*
