@@ -72,7 +72,7 @@ class Bump {
       
       //xAnchorOffset
       if (sprite.xAnchorOffset === undefined) {
-        Object.defineProperty(sprite, "xAnchorOffset ", {
+        Object.defineProperty(sprite, "xAnchorOffset", {
           get(){
             if (sprite.anchor !== undefined) {
               return sprite.height * sprite.anchor.x;
@@ -86,7 +86,7 @@ class Bump {
       
       //yAnchorOffset
       if (sprite.yAnchorOffset === undefined) {
-        Object.defineProperty(sprite, "yAnchorOffset ", {
+        Object.defineProperty(sprite, "yAnchorOffset", {
           get(){
             if (sprite.anchor !== undefined) {
               return sprite.width * sprite.anchor.y;
