@@ -5,7 +5,7 @@ Bump is a lightweight suite of easy-to-use 2D collision methods for use with the
 Pixi rendering engine. You can use these methods to make almost any
 kind of 2D action or arcade game.
 
-(Important! Charm targets Pixi v3.9, which is the most stable version of Pixi, and is the only version I can recommend using. This library will eventually be upgraded for Pixi v4 when the v4 branch matures.)
+(Important! this library targets Pixi v3.9, which is the most stable version of Pixi, and is the only version I can recommend using. This library will eventually be upgraded for Pixi v4 when the v4 branch matures.)
 
 [Setting up](#settingup) <br>
 [Using Bump's collision methods](#using) <br>
