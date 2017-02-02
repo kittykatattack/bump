@@ -2,13 +2,8 @@ class Bump {
   constructor(renderingEngine = PIXI) {
     if (renderingEngine === undefined) throw new Error("Please assign a rendering engine in the constructor before using bump.js"); 
 
-    //Find out which rendering engine is being used (the default is Pixi)
-    this.renderer = "";
-
-    //If the `renderingEngine` is Pixi, set up Pixi object aliases
-    if (renderingEngine.particles.ParticleContainer && renderingEngine.Sprite) {
-      this.renderer = "pixi";
-    }
+    this.renderer = "pixi";
+  
   }
 
   //`addCollisionProperties` adds extra properties to sprites to help
