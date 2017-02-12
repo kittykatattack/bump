@@ -100,7 +100,7 @@ var Bump = (function () {
           Object.defineProperty(sprite, "xAnchorOffset", {
             get: function get() {
               if (sprite.anchor !== undefined) {
-                return sprite.height * sprite.anchor.x;
+                return sprite.width * sprite.anchor.x;
               } else {
                 return 0;
               }
@@ -115,7 +115,7 @@ var Bump = (function () {
           Object.defineProperty(sprite, "yAnchorOffset", {
             get: function get() {
               if (sprite.anchor !== undefined) {
-                return sprite.width * sprite.anchor.y;
+                return sprite.height * sprite.anchor.y;
               } else {
                 return 0;
               }
