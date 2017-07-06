@@ -589,9 +589,9 @@ var Bump = (function () {
     /*
     rectangleCollision
     ------------------
-     Use it to prevent two rectangular sprites from overlapping. 
+     Use it to prevent two rectangular sprites from overlapping.
     Optionally, make the first rectangle bounce off the second rectangle.
-    Parameters: 
+    Parameters:
     a. A sprite object with `x`, `y` `centerX`, `centerY`, `halfWidth` and `halfHeight` properties.
     b. A sprite object with `x`, `y` `centerX`, `centerY`, `halfWidth` and `halfHeight` properties.
     c. Optional: true or false to indicate whether or not the first sprite
@@ -618,18 +618,18 @@ var Bump = (function () {
 
       //Calculate the distance vector
       if (global) {
-        vx = r1.gx + r1.halfWidth - r1.xAnchorOffset - (r2.gx + r2.halfWidth - r2.xAnchorOffset);
-        vy = r1.gy + r1.halfHeight - r1.yAnchorOffset - (r2.gy + r2.halfHeight - r2.yAnchorOffset);
+        vx = r1.gx + Math.abs(r1.halfWidth) - r1.xAnchorOffset - (r2.gx + Math.abs(r2.halfWidth) - r2.xAnchorOffset);
+        vy = r1.gy + Math.abs(r1.halfHeight) - r1.yAnchorOffset - (r2.gy + Math.abs(r2.halfHeight) - r2.yAnchorOffset);
       } else {
         //vx = r1.centerX - r2.centerX;
         //vy = r1.centerY - r2.centerY;
-        vx = r1.x + r1.halfWidth - r1.xAnchorOffset - (r2.x + r2.halfWidth - r2.xAnchorOffset);
-        vy = r1.y + r1.halfHeight - r1.yAnchorOffset - (r2.y + r2.halfHeight - r2.yAnchorOffset);
+        vx = r1.x + Math.abs(r1.halfWidth) - r1.xAnchorOffset - (r2.x + Math.abs(r2.halfWidth) - r2.xAnchorOffset);
+        vy = r1.y + Math.abs(r1.halfHeight) - r1.yAnchorOffset - (r2.y + Math.abs(r2.halfHeight) - r2.yAnchorOffset);
       }
 
       //Figure out the combined half-widths and half-heights
-      combinedHalfWidths = r1.halfWidth + r2.halfWidth;
-      combinedHalfHeights = r1.halfHeight + r2.halfHeight;
+      combinedHalfWidths = Math.abs(r1.halfWidth) + Math.abs(r2.halfWidth);
+      combinedHalfHeights = Math.abs(r1.halfHeight) + Math.abs(r2.halfHeight);
 
       //Check whether vx is less than the combined half widths
       if (Math.abs(vx) < combinedHalfWidths) {
@@ -742,16 +742,16 @@ var Bump = (function () {
 
       //Calculate the distance vector
       if (global) {
-        vx = r1.gx + r1.halfWidth - r1.xAnchorOffset - (r2.gx + r2.halfWidth - r2.xAnchorOffset);
-        vy = r1.gy + r1.halfHeight - r1.yAnchorOffset - (r2.gy + r2.halfHeight - r2.yAnchorOffset);
+        vx = r1.gx + Math.abs(r1.halfWidth) - r1.xAnchorOffset - (r2.gx + Math.abs(r2.halfWidth) - r2.xAnchorOffset);
+        vy = r1.gy + Math.abs(r1.halfHeight) - r1.yAnchorOffset - (r2.gy + Math.abs(r2.halfHeight) - r2.yAnchorOffset);
       } else {
-        vx = r1.x + r1.halfWidth - r1.xAnchorOffset - (r2.x + r2.halfWidth - r2.xAnchorOffset);
-        vy = r1.y + r1.halfHeight - r1.yAnchorOffset - (r2.y + r2.halfHeight - r2.yAnchorOffset);
+        vx = r1.x + Math.abs(r1.halfWidth) - r1.xAnchorOffset - (r2.x + Math.abs(r2.halfWidth) - r2.xAnchorOffset);
+        vy = r1.y + Math.abs(r1.halfHeight) - r1.yAnchorOffset - (r2.y + Math.abs(r2.halfHeight) - r2.yAnchorOffset);
       }
 
       //Figure out the combined half-widths and half-heights
-      combinedHalfWidths = r1.halfWidth + r2.halfWidth;
-      combinedHalfHeights = r1.halfHeight + r2.halfHeight;
+      combinedHalfWidths = Math.abs(r1.halfWidth) + Math.abs(r2.halfWidth);
+      combinedHalfHeights = Math.abs(r1.halfHeight) + Math.abs(r2.halfHeight);
 
       //Check for a collision on the x axis
       if (Math.abs(vx) < combinedHalfWidths) {
@@ -815,13 +815,13 @@ var Bump = (function () {
       }
 
       //Is the circle above the rectangle's top edge?
-      if (c1y - c1.yAnchorOffset < r1y - r1.halfHeight - r1.yAnchorOffset) {
+      if (c1y - c1.yAnchorOffset < r1y - Math.abs(r1.halfHeight) - r1.yAnchorOffset) {
 
         //If it is, we need to check whether it's in the
         //top left, top center or top right
-        if (c1x - c1.xAnchorOffset < r1x - 1 - r1.halfWidth - r1.xAnchorOffset) {
+        if (c1x - c1.xAnchorOffset < r1x - 1 - Math.abs(r1.halfWidth) - r1.xAnchorOffset) {
           region = "topLeft";
-        } else if (c1x - c1.xAnchorOffset > r1x + 1 + r1.halfWidth - r1.xAnchorOffset) {
+        } else if (c1x - c1.xAnchorOffset > r1x + 1 + Math.abs(r1.halfWidth) - r1.xAnchorOffset) {
           region = "topRight";
         } else {
           region = "topMiddle";
@@ -830,13 +830,13 @@ var Bump = (function () {
 
       //The circle isn't above the top edge, so it might be
       //below the bottom edge
-      else if (c1y - c1.yAnchorOffset > r1y + r1.halfHeight - r1.yAnchorOffset) {
+      else if (c1y - c1.yAnchorOffset > r1y + Math.abs(r1.halfHeight) - r1.yAnchorOffset) {
 
           //If it is, we need to check whether it's in the bottom left,
           //bottom center, or bottom right
-          if (c1x - c1.xAnchorOffset < r1x - 1 - r1.halfWidth - r1.xAnchorOffset) {
+          if (c1x - c1.xAnchorOffset < r1x - 1 - Math.abs(r1.halfWidth) - r1.xAnchorOffset) {
             region = "bottomLeft";
-          } else if (c1x - c1.xAnchorOffset > r1x + 1 + r1.halfWidth - r1.xAnchorOffset) {
+          } else if (c1x - c1.xAnchorOffset > r1x + 1 + Math.abs(r1.halfWidth) - r1.xAnchorOffset) {
             region = "bottomRight";
           } else {
             region = "bottomMiddle";
@@ -846,7 +846,7 @@ var Bump = (function () {
         //The circle isn't above the top edge or below the bottom edge,
         //so it must be on the left or right side
         else {
-            if (c1x - c1.xAnchorOffset < r1x - r1.halfWidth - r1.xAnchorOffset) {
+            if (c1x - c1.xAnchorOffset < r1x - Math.abs(r1.halfWidth) - r1.xAnchorOffset) {
               region = "leftMiddle";
             } else {
               region = "rightMiddle";
@@ -974,13 +974,13 @@ var Bump = (function () {
       }
 
       //Is the circle above the rectangle's top edge?
-      if (c1y - c1.yAnchorOffset < r1y - r1.halfHeight - r1.yAnchorOffset) {
+      if (c1y - c1.yAnchorOffset < r1y - Math.abs(r1.halfHeight) - r1.yAnchorOffset) {
 
         //If it is, we need to check whether it's in the
         //top left, top center or top right
-        if (c1x - c1.xAnchorOffset < r1x - 1 - r1.halfWidth - r1.xAnchorOffset) {
+        if (c1x - c1.xAnchorOffset < r1x - 1 - Math.abs(r1.halfWidth) - r1.xAnchorOffset) {
           region = "topLeft";
-        } else if (c1x - c1.xAnchorOffset > r1x + 1 + r1.halfWidth - r1.xAnchorOffset) {
+        } else if (c1x - c1.xAnchorOffset > r1x + 1 + Math.abs(r1.halfWidth) - r1.xAnchorOffset) {
           region = "topRight";
         } else {
           region = "topMiddle";
@@ -989,13 +989,13 @@ var Bump = (function () {
 
       //The circle isn't above the top edge, so it might be
       //below the bottom edge
-      else if (c1y - c1.yAnchorOffset > r1y + r1.halfHeight - r1.yAnchorOffset) {
+      else if (c1y - c1.yAnchorOffset > r1y + Math.abs(r1.halfHeight) - r1.yAnchorOffset) {
 
           //If it is, we need to check whether it's in the bottom left,
           //bottom center, or bottom right
-          if (c1x - c1.xAnchorOffset < r1x - 1 - r1.halfWidth - r1.xAnchorOffset) {
+          if (c1x - c1.xAnchorOffset < r1x - 1 - Math.abs(r1.halfWidth) - r1.xAnchorOffset) {
             region = "bottomLeft";
-          } else if (c1x - c1.xAnchorOffset > r1x + 1 + r1.halfWidth - r1.xAnchorOffset) {
+          } else if (c1x - c1.xAnchorOffset > r1x + 1 + Math.abs(r1.halfWidth) - r1.xAnchorOffset) {
             region = "bottomRight";
           } else {
             region = "bottomMiddle";
@@ -1005,7 +1005,7 @@ var Bump = (function () {
         //The circle isn't above the top edge or below the bottom edge,
         //so it must be on the left or right side
         else {
-            if (c1x - c1.xAnchorOffset < r1x - r1.halfWidth - r1.xAnchorOffset) {
+            if (c1x - c1.xAnchorOffset < r1x - Math.abs(r1.halfWidth) - r1.xAnchorOffset) {
               region = "leftMiddle";
             } else {
               region = "rightMiddle";
@@ -1557,4 +1557,5 @@ var Bump = (function () {
 
   return Bump;
 })();
+
 //# sourceMappingURL=bump.js.map
