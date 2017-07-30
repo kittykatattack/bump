@@ -240,7 +240,7 @@ An important feature of this method is that when two moving circles collide,
 they transfer their velocities to each other in a way that makes them bounce 
 apart very realistically. 
 
-####Checking for multiple collisions
+#### Checking for multiple collisions
 
 If you have a bunch of moving circles, like marbles,
 you need to check for a collision between each of them on every frame
