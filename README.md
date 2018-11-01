@@ -25,7 +25,7 @@ Installing and setting up Bump
 ------------------------------
 
 Use a `<script>` tag to link the `bump.js` file to your HTML document.
-```
+```html
 <script src="bump.js"></script>
 ```
 (If you prefer, you can load `bump.js` using any JavaScript module
@@ -36,7 +36,7 @@ code.
 
 Next, create a new instance of Bump at the beginning of your program.
 Supply the renderer you want to use in the constructor (the defautl is `PIXI`) like this:
-```
+```js
 b = new Bump(PIXI);
 ```
 The variable `b` (for "bump", of course!) now represents the running
@@ -56,7 +56,7 @@ b.hitTestRectangle(spriteOne, spriteTwo);
 Here are all the collision methods you can use:
 
 <a id="hit"></a>
-###`hit`
+### `hit`
 
 `hit` is a universal collision function. It automatically detects the
 kinds of sprites that are being used in the collision and chooses the
@@ -65,7 +65,7 @@ having to remember which of the many collision functions in Bump's
 library to use, you only need remember one: `hit`.
 
 In its simplest form, you can use `hit` like this: 
-```
+```js
 hit(spriteOne, spriteTwo)
 ```
 It will return `true` if the sprites are touching and `false` if they
@@ -95,7 +95,7 @@ Now your sprites will bounce!
 
 Setting the fifth argument to `true`  makes the `hit` method  use the
 sprites’ **global coordinates**.
-```
+```js
 hit(spriteOne, spriteTwo, true, true, true)
 ```
 The global coordinates are the sprites positions relative to the
@@ -159,7 +159,7 @@ lower level collision methods. If you prefer to use the lower-level
 methods, they're all listed next.
 
 <a id="hittestpoint"></a>
-###`hitTestPoint`
+### `hitTestPoint`
 
 The most basic collision test is to check whether a point is
 intersecting a sprite. `hitTestPoint` will help you to figure this out. 
@@ -188,7 +188,7 @@ The sprite will now be interpreted as circular and have a new `radius`
 property which is equal to half the sprite's width.
 
 <a id="hittestcircle"></a>
-###`hitTestCircle`
+### `hitTestCircle`
 
 If you want to check for a collision between two circular sprites, 
 use the `hitTestCircle` method: 
@@ -205,7 +205,7 @@ if (hitTestCircle(sprite1, sprite2)) {
 ```
 
 <a id="circlecollision"></a>
-###`circleCollision`
+### `circleCollision`
 
 If a moving circle hits a non-moving circle, you can create a collision 
 reaction using the `circleCollision` method:
@@ -226,7 +226,7 @@ if you want to check for collisions between sprites that have different
 parent containers.
 
 <a id="movingcirclecollision"></a>
-###`movingCircleCollision`
+### `movingCircleCollision`
 
 You can create a collision reaction between two moving circles using 
 the `movingCircleCollision` method. Supply two circular sprites as arguments:
@@ -284,7 +284,7 @@ them bounce off one another. You now know most of the important techniques you n
 to make a wide range of games using circular sprites.
 
 <a id="hittestrectangle"></a>
-###`hitTestRectangle`
+### `hitTestRectangle`
 
 To find out whether two rectangular sprites are overlapping, use a function called 
 `hitTestRectangle`:
@@ -303,7 +303,7 @@ if (hitTestRectangle(rectangle1, rectangle2)) {
 ```
 
 <a id="rectanglecollision"></a>
-###`rectangleCollision`
+### `rectangleCollision`
 
 `rectangleCollision` make the rectangles behave as though they have
 solid mass. It prevents any of the rectangular sprites in its first 
@@ -355,7 +355,7 @@ the other collision methods, you should set the final optional argument,
 `global`, to `true` if you want to use the sprites’ global coordinates.)
 
 <a id="hittestcirclerectangle"></a>
-###`hitTestCircleRectangle`
+### `hitTestCircleRectangle`
 
 `hitTestCircleRectangle` checks for a collision between a circular and
 rectangular sprite. The first argument is the circular sprite, and the 
@@ -370,7 +370,7 @@ the circle is hitting the rectangle. It can have the value "topLeft",
 `undefined`.
 
 <a id="circlerectanglecollision"></a>
-###`circleRectangleCollision`
+### `circleRectangleCollision`
 
 Use `circleRectangleCollision` to make a circle bounce off a square’s sides or corners:
 ```js
@@ -381,7 +381,7 @@ and setting the fourth argument to `true` tells the method to use the
 sprites’ global coordinates.
 
 <a id="contain"></a>
-###`contain`
+### `contain`
 
 `contain` can be used to contain a sprite with `x` and
 `y` properties inside a rectangular area.
